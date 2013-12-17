@@ -1,0 +1,19 @@
+---
+layout: base
+title: Daniel Nill
+---
+<!-- <div class="page-header">
+  <h1><small>A Collection of Essays</span></h1>
+</div> -->
+
+{% for post in site.posts %}
+  <div>
+    <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
+    <span>{{ post.date | date_to_string }}</span>
+    <div>
+      {{ post.content }}
+    </div>
+  </div>
+{% endfor %}
+
+

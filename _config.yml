@@ -1,3 +1,6 @@
+title: Essays
 name: Daniel Nill
 markdown: redcarpet
 pygments: true
+exclude: [minimal-mistakes-master]
+

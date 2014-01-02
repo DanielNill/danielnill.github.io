@@ -23,7 +23,7 @@ h5,
 h6,
 p,
 blockquote,
-pre,
+/*pre,*/
 a,
 abbr,
 acronym,
@@ -535,18 +535,18 @@ address {
   line-height: 18px;
   margin-bottom: 18px;
 }
-code, pre {
+/*code, pre {
   padding: 0 3px 2px;
   font-family: Monaco, Andale Mono, Courier New, monospace;
   font-size: 12px;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
-}
+}*/
 code {
-  background-color: #fee9cc;
+  background-color: #f5f5f5;
   color: rgba(0, 0, 0, 0.75);
-  padding: 1px 3px;
+  /*padding: 1px 3px;*/
 }
 pre {
   background-color: #f5f5f5;
@@ -557,9 +557,6 @@ pre {
   font-size: 12px;
   border: 1px solid #ccc;
   border: 1px solid rgba(0, 0, 0, 0.15);
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
   white-space: pre;
   white-space: pre-wrap;
   word-wrap: break-word;
@@ -1103,24 +1100,24 @@ textarea[readonly] {
  * ---------------------------------------- */
 table {
   width: 100%;
-  margin-bottom: 18px;
+  /*margin-bottom: 18px;*/
   padding: 0;
   font-size: 13px;
   border-collapse: collapse;
 }
 table th, table td {
-  padding: 10px 10px 9px;
+  /*padding: 10px 10px 9px;*/
   line-height: 18px;
   text-align: left;
 }
 table th {
-  padding-top: 9px;
+  /*padding-top: 9px;*/
   font-weight: bold;
   vertical-align: middle;
 }
 table td {
   vertical-align: top;
-  border-top: 1px solid #ddd;
+  /*border-top: 1px solid #ddd;*/
 }
 table tbody th {
   border-top: 1px solid #ddd;

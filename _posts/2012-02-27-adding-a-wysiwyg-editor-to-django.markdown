@@ -1,7 +1,6 @@
 ---
 title: Adding a WYSIWYG Editor to Django Admin
 layout: page
-alias: /blog/adding-a-wysiwyg-editor-to-django-admin/
 ---
 
 This will tell you pretty much everything you need to know about adding a WYSIWYG editor or any other javascript based features you may want to your django admin.

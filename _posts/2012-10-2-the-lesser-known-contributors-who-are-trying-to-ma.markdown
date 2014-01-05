@@ -1,7 +1,6 @@
 ---
 title: The Lesser-Known Contributors Who Are Trying To Make PHP Good Again
 layout: page
-alias: /blog/the-lesser-known-contributors-who-are-trying-to-ma/
 ---
 
 Php gets a log of hate, and a lot of that hate is [not](http://php.net/manual/en/types.comparisons.php) [without](http://me.veekun.com/blog/2012/04/09/php-a-fractal-of-bad-design/) [merit](http://www.codinghorror.com/blog/2012/06/the-php-singularity.html).  But I have recently started adopting some tools at work that make php development a lot more enjoyable, and thought I would share.

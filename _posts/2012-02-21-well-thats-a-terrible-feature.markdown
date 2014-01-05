@@ -1,7 +1,6 @@
 ---
 title: Well That's a Terrible Feature
 layout: page
-alias: /blog/well-thats-a-terrible-feature/
 ---
 I recently discovered a really terrible feature now integrated into most modern browsers. The javascript window object is assumed appended to all javascript variables.
 

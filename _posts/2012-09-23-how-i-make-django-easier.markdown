@@ -1,3 +1,8 @@
+---
+title: "How I Make Django Easier"
+layout: page
+alias: /blog/how-i-make-django-easier
+---
 Everyone who has worked with Django for any reasonable period of time comes to the realization that starting up a new project can be a pain in the butt if you don’t build some level of automation into the process.  After a few times copy and pasting into your <pre>settings.py</pre> most developers decide they can’t handle it any more and write some scripts to take care of the setup process for them.
 
 I thought I would share my setup script, recently modified, and hopefully it will be helpful to those who are still in copy and past land.

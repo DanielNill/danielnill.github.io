@@ -1,7 +1,7 @@
 ---
-layout: base
+layout: page
 title: Node.js Tutorial With Socket.io
-alias: /blog/nodejs-tutorial-with-socketio
+alias: /blog/nodejs-tutorial-with-socketio/
 ---
 
 I was shocked to recently discover that there are no great quick tutorial on the basics of using socket.io with node js.  While there isn't a whole lot to it, someone not familiar with node.js and the protocol for WebSockets is left to scrounge for random snippets of code.  Trying to parse the protocol of Websockets while learning the socket.io library and the basics of Node.js all at the same time is no easy feat.  And even more frustrating, someone new to Node.js is likely interested in trying it out for the features socket.io provide.

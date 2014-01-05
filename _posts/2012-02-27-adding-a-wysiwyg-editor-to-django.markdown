@@ -1,6 +1,6 @@
 ---
 title: Adding a WYSIWYG Editor to Django Admin
-layout: base
+layout: page
 alias: /blog/adding-a-wysiwyg-editor-to-django-admin/
 ---
 

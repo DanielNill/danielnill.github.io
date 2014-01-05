@@ -29,6 +29,14 @@ a         { color: #00a; }
 a:hover   { color: #000; }
 a:visited { color: #a0a; }
 
+.image-wrap img {
+  width: 75%;
+  height: 300px;
+  margin-right: auto;
+  margin-left: auto;
+  display: block;
+}
+
 /*****************************************************************************/
 /*
 /* Home

@@ -1,6 +1,6 @@
 ---
 title: The Lesser-Known Contributors Who Are Trying To Make PHP Good Again
-layout: base
+layout: page
 alias: /blog/the-lesser-known-contributors-who-are-trying-to-ma/
 ---
 

@@ -25,11 +25,14 @@
 <div id="index" itemprop="mainContentOfPage" itemscope itemtype="http://schema.org/Blog">
   <h3><a href="{{ site.url}}/">Essays</a></h3>
   {% for post in site.posts %}
-  <article itemscope itemtype="http://schema.org/BlogPosting" itemprop="blogPost" class="listed_article">
-    <h2 class="listed_headline" temprop="headline"><a href="{{ site.url }}{{ post.url }}" rel="bookmark" title="{{ post.title }}">{{ post.title }}</a></h2>
-    <small class="article_date">{{ post.date | date_to_string }}</small><br /><br />
-    <p itemprop="text">{{ post.content }}</p>
-  </article>
+    <article itemscope itemtype="http://schema.org/BlogPosting" itemprop="blogPost" class="listed_article">
+      <h2 class="listed_headline" temprop="headline"><a href="{{ site.url }}{{ post.url }}" rel="bookmark" title="{{ post.title }}">{{ post.title }}</a></h2>
+      <small class="article_date">{{ post.date | date_to_string }}</small><br /><br />
+      <p itemprop="text">{{ post.content }}</p>
+    </article>
+    <br />
+    <hr >
+    <br />
   {% endfor %}
 </div><!-- /#index -->
 

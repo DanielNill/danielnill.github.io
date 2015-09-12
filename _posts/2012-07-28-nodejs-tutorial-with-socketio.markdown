@@ -98,7 +98,7 @@ So now we have very basic server, but it can only server our root domain.  Lets 
                 response.writeHead(200, {'Content-Type': 'text/html'});
                 response.write('hello world');
                 break;
-            case 'socket.html':
+            case '/socket.html':
                 fs.readFile(__dirname + path, function(error, data){
                     if (error){
                         response.writeHead(404);
@@ -195,7 +195,7 @@ var server = http.createServer(function(request, response){
             response.writeHead(200, {'Content-Type': 'text/html'});
             response.write('hello world');
             break;
-        case 'socket.html':
+        case '/socket.html':
             fs.readFile(__dirname + path, function(error, data){
                 if (error){
                     response.writeHead(404);

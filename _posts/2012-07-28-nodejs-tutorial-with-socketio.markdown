@@ -3,6 +3,8 @@ layout: page
 title: Node.js Tutorial With Socket.io
 ---
 
+#####Update: this tutorial has been update to run on node 5.0.0 and socket.io 1.3.7.  If you have trouble with getting the code to execute, make sure you are running on these versions.
+
 I was shocked to recently discover that there are no great quick tutorial on the basics of using socket.io with node js.  While there isn't a whole lot to it, someone not familiar with node.js and the protocol for WebSockets is left to scrounge for random snippets of code.  Trying to parse the protocol of Websockets while learning the socket.io library and the basics of Node.js all at the same time is no easy feat.  And even more frustrating, someone new to Node.js is likely interested in trying it out for the features socket.io provide.
 
 So I thought I would take a brief stab at filling this void. Lets get started:
@@ -33,7 +35,6 @@ With these 3 lines we have a server. You can save this as `server.js` and run `n
     var http = require('http');
 
     var server = http.createServer(function(request, response){
-        console.log('Connection');
         response.writeHead(200, {'Content-Type': 'text/html'});
         response.write('hello world');
         response.end();
@@ -42,9 +43,9 @@ With these 3 lines we have a server. You can save this as `server.js` and run `n
     server.listen(8001);
 {% endhighlight %}
 
-With these changes we are now sending something to the client.  Save `server.js` and run `node server.js` .  Still nothing happens, but if we go to [http://localhost:8001](http://localhost:8001) we see a page that says "hello world"!  Also useful to note, if we look at the command line we see that it has printed "connection".
+With these changes we are now sending something to the client.  Save `server.js` and run `node server.js` .  Still nothing happens, but if we go to [http://localhost:8001](http://localhost:8001) we see a page that says "hello world"!
 
-What happens if we reload the browser?  We see the same page and the command line has printed "connection" again.  This is because the actions we put inside createServer will be executed each time [http://localhost:8001](http://localhost:8001) is loaded.  Lets slow down and go through what we did line by line.
+The actions we put inside createServer will be executed each time [http://localhost:8001](http://localhost:8001) is loaded.  Lets slow down and go through what we did line by line.
 
 {% highlight javascript  %}
 var server = http.createServer(function(request, response){});
@@ -54,11 +55,11 @@ server.listen(8001);
 Here we have created the server just as we had the first time, but now we are passing it an anonymous function that defines what happens with each request to the server and response from the server.
 {% highlight javascript  %}
 var server = http.createServer(function(request, response){
-    console.log('connection');
+    //...
 });
 {% endhighlight %}
 
-Here we simply say on every request response interaction with the server we will write "connection" to the command line.
+Here we simply say on every request response interaction with the server we will take some action.
 
 {% highlight javascript  %}
     response.writeHead(200, {'Content-Type': 'text/html'});
@@ -90,38 +91,40 @@ So now we have very basic server, but it can only server our root domain.  Lets 
     var fs = require('fs');
 
     var server = http.createServer(function(request, response){
-        console.log('Connection');
         var path = url.parse(request.url).pathname;
 
         switch(path){
             case '/':
                 response.writeHead(200, {'Content-Type': 'text/html'});
                 response.write('hello world');
+                response.end();
                 break;
             case '/socket.html':
                 fs.readFile(__dirname + path, function(error, data){
                     if (error){
                         response.writeHead(404);
                         response.write("opps this doesn't exist - 404");
+                        response.end();
                     }
                     else{
                         response.writeHead(200, {"Content-Type": "text/html"});
                         response.write(data, "utf8");
+                        response.end();
                     }
                 });
                 break;
             default:
                 response.writeHead(404);
                 response.write("opps this doesn't exist - 404");
+                response.end();
                 break;
         }
-        response.end();
     });
 
     server.listen(8001);
 {% endhighlight %}
 
-If you save this code as `server.js` you can rerun `node server.js` when you load [http://localhost:8001](http://localhost:8001) into your browser you will see that nothing has changed.  We still get "hello world" in the browser and "connection" in the command line.  However, we just build a router so now we should be able to go other urls.  Looking at the code we just wrote it seems like we should be able to visit [http://localhost:8001/socket.html](http://localhost:8001/socket.html) and something should happen.  But when we try that we get our 404 message.  Lets go through what we added and see why.
+If you save this code as `server.js` you can rerun `node server.js` when you load [http://localhost:8001](http://localhost:8001) into your browser you will see that nothing has changed.  We still get "hello world" in the browser.  However, we just build a router so now we should be able to go other urls.  Looking at the code we just wrote it seems like we should be able to visit [http://localhost:8001/socket.html](http://localhost:8001/socket.html) and something should happen.  But when we try that we get our 404 message.  Lets go through what we added and see why.
 
 {% highlight javascript %}
 var url = require('url');
@@ -187,41 +190,43 @@ var fs = require('fs');
 var io = require('socket.io');
 
 var server = http.createServer(function(request, response){
-    console.log('Connection');
     var path = url.parse(request.url).pathname;
 
     switch(path){
         case '/':
             response.writeHead(200, {'Content-Type': 'text/html'});
             response.write('hello world');
+            response.end();
             break;
         case '/socket.html':
             fs.readFile(__dirname + path, function(error, data){
                 if (error){
                     response.writeHead(404);
                     response.write("opps this doesn't exist - 404");
+                    response.end();
                 }
                 else{
                     response.writeHead(200, {"Content-Type": "text/html"});
                     response.write(data, "utf8");
+                    response.end();
                 }
             });
             break;
         default:
             response.writeHead(404);
             response.write("opps this doesn't exist - 404");
+            response.end();
             break;
     }
-    response.end();
 });
 
 server.listen(8001);
 
-var io.listen(server);
+io.listen(server);
 {% endhighlight %}
 All we have added here is a require for the socket.io module at the top and the line `io.listen(server);`.  This simply says that when the server is instantiated (note: not connected to) we will open a listener for socket.io.  This means that our server will 'listen' for pages loaded by the server that have a WebSocket connection instantiated on them.
 
-So lets see what happens when we run node server.js and reload [http://localhost:8001/socket.html](http://localhost:8001/socket.html).  Nothing seems to change in the browser, but when we look at the command line we see info - socket.io started.  Great that means that our server is now listening for any websocket connections that may occur.
+So lets see what happens when we run node server.js and reload [http://localhost:8001/socket.html](http://localhost:8001/socket.html).  Nothing seems to change in the browser but our server is now listening for any websocket connections that may occur.
 
 Now that the server is listening for socket.io connections lets give our socket.html page a WebSockets connection so that the server will actually have something to talk to.  To do this we simple change socket.html to:
 
@@ -238,18 +243,7 @@ Now that the server is listening for socket.io connections lets give our socket.
   </body>
 </html>
 {% endhighlight %}
-Here we have added the socket.io.js script and a body script to create the client side socket connection.  So now if we run node server.js and reload the page we will see in the command line:
-{% highlight bash %}
- info  - socket.io started
- debug - served static content /socket.io.js
- debug - client authorized
- info  - handshake authorized 9081485731232459160
- debug - setting request GET /socket.io/1/websocket/9081485731232459160
- debug - set heartbeat interval for client 9081485731232459160
- debug - client authorized for
- debug - websocket writing 1::
-{% endhighlight %}
-Now we have a WebSockets connection between the client and our server.  Let's try sending some information from the server to the client through our socket.io connection
+Here we have added the socket.io.js script and a body script to create the client side socket connection. Now we have a WebSockets connection between the client and our server.  Let's try sending some information from the server to the client through our socket.io connection
 
 ####Sending Data To The Client:
 
@@ -260,8 +254,8 @@ The flip side of the on method is the emit method.  The emit method sends the ma
 So here is what we add to server.js:
 
 {% highlight javascript %}
-io.listen(server);
-io.sockets.on('connection', function(socket){
+var listener = io.listen(server);
+listener.sockets.on('connection', function(socket){
     socket.emit('message', {'message': 'hello world'});
 });
 {% endhighlight %}
@@ -367,10 +361,9 @@ Here all we have added is a textarea and an emit event to be triggered every tim
 Now we will add the on listener to our server.js file:
 
 {% highlight javascript %}
-io.listen(server);
-io.set('log level', 1);
+var listener = io.listen(server);
 
-io.sockets.on('connection', function(socket){
+listener.sockets.on('connection', function(socket){
   //send data to client
   setInterval(function(){
     socket.emit('date', {'date': new Date()});
@@ -384,9 +377,7 @@ io.sockets.on('connection', function(socket){
 {% endhighlight %}
 You will see that here we have added the just a few lines again.
 
-First we added `io.set('log level', 1);`.  This turns off all those debug statements so that we can actually see what we are outputing to our command line without it being interupted with socket.io reports.
-
-Next we added
+First we added
 
 {% highlight javascript %}
 //recieve client data

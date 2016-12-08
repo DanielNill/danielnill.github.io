@@ -1,5 +1,5 @@
 ---
-title: A Quick Rust tip: Comparing Strings
+title: A Quick Rust tip (Comparing Strings)
 layout: page
 ---
 

@@ -30,10 +30,8 @@ bing_verify:
 # Links to include in top navigation
 # For external links add external: true
 links:
-  - title: Essays
+  - title: Posts
     url: /
-  - title: Projects
-    url: /projects.html
   - title: Contact
     url: /contact.html
 

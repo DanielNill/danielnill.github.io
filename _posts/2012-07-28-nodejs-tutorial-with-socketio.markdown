@@ -393,6 +393,4 @@ So restart your server and try everything out.  We should now have a clock runin
 
 Hopefully, this has provided a more thorough introductory tutorial for beginners interested in using node.js and socket.io.  If you have any questions drop me a line.
 
-#### You can find the example project [here](https://github.com/DanielNIll/node-and-socket-example)
-
-test
+You can find the example project [here](https://github.com/DanielNIll/node-and-socket-example)

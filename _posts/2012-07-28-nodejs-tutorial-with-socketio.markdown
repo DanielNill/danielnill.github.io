@@ -3,13 +3,13 @@ layout: page
 title: Node.js Tutorial With Socket.io
 ---
 
-#####Update: this tutorial has been update to run on node 5.0.0 and socket.io 1.3.7.  If you have trouble with getting the code to execute, make sure you are running on these versions.
+#### Update: this tutorial has been update to run on node 5.0.0 and socket.io 1.3.7.  If you have trouble with getting the code to execute, make sure you are running on these versions.
 
 I was shocked to recently discover that there are no great quick tutorial on the basics of using socket.io with node js.  While there isn't a whole lot to it, someone not familiar with node.js and the protocol for WebSockets is left to scrounge for random snippets of code.  Trying to parse the protocol of Websockets while learning the socket.io library and the basics of Node.js all at the same time is no easy feat.  And even more frustrating, someone new to Node.js is likely interested in trying it out for the features socket.io provide.
 
 So I thought I would take a brief stab at filling this void. Lets get started:
 
-####What We Will Cover:
+### What We Will Cover:
 
 In this tutorial we will cover
 
@@ -18,7 +18,7 @@ In this tutorial we will cover
 - sending data to the client through the socket connection
 - sending data to the server through the socket connection
 
-####Your Basic Server:
+#### Your Basic Server:
 
 There are several modules you can use to initiate a server in Node.js, but they are all pretty much the same.  We will use the http library.
 
@@ -81,7 +81,7 @@ Finally we have
 
 This simply says that we are done defining the response and action and executes them.
 
-####Creating The Router:
+#### Creating The Router:
 
 So now we have very basic server, but it can only server our root domain.  Lets fix that.  We add the following to `server.js`.
 
@@ -167,7 +167,7 @@ You will also want to note that we still call `response.end()` at the bottom of 
 
 Now that we see why we are getting that 404 lets fix it.  Lets create a new page where we will use socket.io
 
-####Adding Socket.io:
+#### Adding Socket.io:
 
 To start with we want to get rid of the 404 error when we visit http://localhost:8001/socket.html so we are going to create a socket.html file.
 
@@ -245,7 +245,7 @@ Now that the server is listening for socket.io connections lets give our socket.
 {% endhighlight %}
 Here we have added the socket.io.js script and a body script to create the client side socket connection. Now we have a WebSockets connection between the client and our server.  Let's try sending some information from the server to the client through our socket.io connection
 
-####Sending Data To The Client:
+#### Sending Data To The Client:
 
 Now we want to send some data from the server to socket.html.  All data transactions in socket.io, like in most of node.js, can be handled with callbacks primarily we will utilize the `on` method.  The on method in simplistic terms is used to map a method name to an annonymous function.  Because we are using socket.io the on method simply uses the listener on the websocket connection for the method name and when it is found it executes the mapped annonymous function.
 
@@ -327,7 +327,7 @@ Our on method simply says when we recieve an emit action labeled date, we take t
 
 Try restarting your server and load the page.  You should now see the date displayed and being updated every second.  Go back to your server.js file and remove the 1000 from the setInterval.  Now the date is being updated every milisecond.
 
-####Sending Data From the Client To the Server:
+#### Sending Data From the Client To the Server:
 
 Now that we know how to send continuous data from the server to the client all we have left to do is learn how to send continuous data from the client back to the server.  You will be happy to know that this process is completely the same as what we just did.   So lets say we want to print every letter the user types into a textbox to the server console.
 
@@ -389,8 +389,10 @@ This is our listener for the client_data emit call.  When an action triggers thi
 
 So restart your server and try everything out.  We should now have a clock runing in our browser with data from the server and data being streamed from the browser to the command line when we type in the textarea.
 
-####Conclusion:
+#### Conclusion:
 
 Hopefully, this has provided a more thorough introductory tutorial for beginners interested in using node.js and socket.io.  If you have any questions drop me a line.
 
-You can find the example project [here](https://github.com/DanielNIll/node-and-socket-example)
+#### You can find the example project [here](https://github.com/DanielNIll/node-and-socket-example)
+
+test

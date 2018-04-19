@@ -35,6 +35,10 @@ links:
   - title: Contact
     url: /contact.html
 
+# for rss feed
+plugins:
+  - jekyll-feed
+
 # http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 timezone:    America/San_Francisco
 future:      true

@@ -1,9 +1,10 @@
 ---
 title: A Quick Rust tip (Comparing Strings)
 layout: page
+published: true
 ---
 
-I've been learning [rust](https://www.rust-lang.org/en-US/) recently and so wanted to start tracking things that I've learned.
+I have been learning [rust](https://www.rust-lang.org/en-US/) recently and so wanted to start tracking things that I've learned.
 
 You can learn a lot more about strings in rust via [this explainer](http://www.steveklabnik.com/rust-issue-17340/) but one thing I got hung up on was comparing strings.
 

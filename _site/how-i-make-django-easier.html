@@ -1,0 +1,240 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>How I Make Django Easier &#8211; Daniel Nill</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<!-- Twitter Cards -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="/images/">
+<meta name="twitter:title" content="How I Make Django Easier">
+<meta name="twitter:description" content="">
+<meta name="twitter:creator" content="@DanielNill">
+<link type="application/atom+xml" rel="alternate" href="/feed.xml" title="Daniel Nill" />
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How I Make Django Easier">
+<meta property="og:description" content="">
+<meta property="og:url" content="/how-i-make-django-easier">
+<meta property="og:site_name" content="Daniel Nill">
+
+
+
+
+
+<link rel="canonical" href="/how-i-make-django-easier">
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Daniel Nill Feed">
+
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Google Webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700|PT+Serif:400,700,400italic' rel='stylesheet' type='text/css'>
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.min.css">
+
+<!--[if (lt IE 9) & (!IEMobile)]>
+<link rel="stylesheet" href="/assets/css/ie.min.css">
+<![endif]-->
+
+<meta http-equiv="cleartype" content="on">
+
+</head>
+
+<body class="page" itemscope itemtype="http://schema.org/WebPage">
+
+<!--[if lt IE 9]><div class="browser-upgrade alert alert-info">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div><![endif]-->
+
+<div class="navigation-wrapper">
+	<div class="site-name">
+		<a href="">Daniel Nill</a>
+	</div><!-- /.site-name -->
+	<div class="top-navigation">
+		<nav role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+		    <ul>
+		        
+				<li><a href="/" >Posts</a></li>
+		        
+				<li><a href="/about.html" >About</a></li>
+		        
+		    </ul>
+		</nav>
+	</div><!-- /.top-navigation -->
+</div><!-- /.navigation-wrapper -->
+
+
+
+
+<div id="main" role="main"  itemprop="mainContentOfPage">
+  <div class="article-author-side">
+    <!-- <img src="/images/profile-photo-new1.jpg" class="bio-photo" alt="Daniel Nill bio photo"></a> -->
+<p></p>
+<br/>
+<a href="http://twitter.com/DanielNill" class="author-social" target="_blank"><i class="icon-twitter"></i> Twitter</a>
+
+
+<a href="http://linkedin.com/in/danielnill" class="author-social" target="_blank"><i class="icon-linkedin"></i> LinkedIn</a>
+
+<a href="http://github.com/DanielNill" class="author-social" target="_blank"><i class="icon-github"></i> Github</a>
+
+
+
+  </div>
+  <article itemscope itemtype="http://schema.org/CreativeWork">
+    <h1 itemprop="name">How I Make Django Easier</h1>
+    <div class="article-wrap" itemprop="text">
+      <p>Everyone who has worked with Django for any reasonable period of time comes to the realization that starting up a new project can be a pain in the butt if you don’t build some level of automation into the process.  After a few times copy and pasting into your &lt;pre&gt;settings.py&lt;/pre&gt; most developers decide they can’t handle it any more and write some scripts to take care of the setup process for them.</p>
+
+<p>I thought I would share my setup script, recently modified, and hopefully it will be helpful to those who are still in copy and past land.</p>
+
+<p>First, my basic setup for most django projects I start is as follows:</p>
+
+<p>1)   create a new virtual environment with <a href="https://pypi.python.org/pypi/virtualenv">virtualenv</a></p>
+
+<p>2)   install django within the environment and start a new project</p>
+
+<p>3)   remove database setup, static media setup and debug settings from the auto generated settings.py file.</p>
+
+<p>4)   Add debug_toolbar settings, a dynamic media path, dynamic template_dir path,  django_evolution or south and an import of a settings_local.py file to the settings.py file.</p>
+
+<p>5)   Create a settings_local.py file that defines local database connection, static media path and debug settings.</p>
+
+<p>6)   Modify the urls.py file to handle your static and media directories correctly.</p>
+
+<p>7)   Create a new sublime text project containing the new django project.</p>
+
+<p>8)   Initialize the django project as a git repo  and create a .gitignore file.</p>
+
+<p>9)   Create a deploy script to ssh into production and git pull from github.</p>
+
+<p>10)  Get started actually building my app</p>
+
+<p>Do this once or twice and you start to understand why many prefer customization over configuration.  But if you’re a Django lover like myself you find a way around it.</p>
+
+<p>So I built this quick and dirty script to do all of this for me:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python">  <span class="kn">import</span> <span class="nn">subprocess</span><span class="p">,</span> <span class="n">os</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span> <span class="n">re</span>
+  <span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">choice</span>
+  <span class="kn">from</span> <span class="nn">git</span> <span class="kn">import</span> <span class="o">*</span>
+  <span class="kn">from</span> <span class="nn">django_create</span> <span class="kn">import</span> <span class="o">*</span>
+
+  <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+      <span class="c1">#variable declarations
+</span>      <span class="n">starting_path</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">getcwd</span><span class="p">()</span>
+      <span class="n">templates_path</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span> <span class="o">+</span> <span class="s">'/templates'</span>
+      <span class="n">project_name</span> <span class="o">=</span> <span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+      <span class="n">create_virtualenv</span><span class="p">(</span><span class="n">project_name</span><span class="p">)</span>
+      <span class="n">create_django_project</span><span class="p">(</span><span class="n">project_name</span><span class="p">,</span> <span class="n">starting_path</span><span class="p">)</span>
+      <span class="n">create_settings_file</span><span class="p">(</span><span class="n">project_name</span><span class="p">,</span> <span class="n">starting_path</span><span class="p">,</span> <span class="n">templates_path</span><span class="p">)</span>
+      <span class="n">create_secret_key</span><span class="p">()</span>
+      <span class="n">create_local_settings_file</span><span class="p">(</span><span class="n">project_name</span><span class="p">,</span> <span class="n">templates_path</span><span class="p">)</span>
+      <span class="n">create_other_files</span><span class="p">(</span><span class="n">project_name</span><span class="p">,</span> <span class="n">starting_path</span><span class="p">)</span>
+      <span class="n">create_git_repo</span><span class="p">(</span><span class="n">project_name</span><span class="p">,</span> <span class="n">starting_path</span><span class="p">,</span> <span class="n">templates_path</span><span class="p">)</span>
+      <span class="n">create_deploy_script</span><span class="p">(</span><span class="n">project_name</span><span class="p">,</span> <span class="n">starting_path</span><span class="p">,</span> <span class="n">templates_path</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="nf">create_virtualenv</span><span class="p">(</span><span class="n">project_name</span><span class="p">):</span>
+      <span class="n">subprocess</span><span class="p">.</span><span class="n">call</span><span class="p">([</span><span class="s">'virtualenv'</span><span class="p">,</span> <span class="n">project_name</span><span class="p">])</span>
+
+  <span class="k">def</span> <span class="nf">create_django_project</span><span class="p">(</span><span class="n">project_name</span><span class="p">,</span> <span class="n">starting_path</span><span class="p">):</span>
+      <span class="n">os</span><span class="p">.</span><span class="n">chdir</span><span class="p">(</span><span class="s">'/'</span><span class="p">.</span><span class="n">join</span><span class="p">([</span><span class="n">starting_path</span><span class="p">,</span> <span class="n">project_name</span><span class="p">]))</span>
+      <span class="n">subprocess</span><span class="p">.</span><span class="n">call</span><span class="p">([</span><span class="s">'source'</span><span class="p">,</span> <span class="s">'bin/activate'</span><span class="p">])</span>
+      <span class="n">subprocess</span><span class="p">.</span><span class="n">call</span><span class="p">([</span><span class="s">'bin/pip'</span><span class="p">,</span> <span class="s">'install'</span><span class="p">,</span> <span class="s">'django'</span><span class="p">])</span>
+      <span class="n">subprocess</span><span class="p">.</span><span class="n">call</span><span class="p">([</span><span class="s">'django-admin.py'</span><span class="p">,</span> <span class="s">'startproject'</span><span class="p">,</span> <span class="n">project_name</span><span class="p">])</span>
+
+  <span class="k">def</span> <span class="nf">create_settings_file</span><span class="p">(</span><span class="n">project_name</span><span class="p">,</span> <span class="n">starting_path</span><span class="p">,</span> <span class="n">templates_path</span><span class="p">):</span>
+      <span class="k">print</span> <span class="s">'Creating custom settings.py file'</span>
+      <span class="n">os</span><span class="p">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">starting_path</span> <span class="o">+</span> <span class="s">'/'</span> <span class="o">+</span> <span class="n">project_name</span> <span class="o">+</span> <span class="s">'/'</span> <span class="o">+</span> <span class="n">project_name</span><span class="p">)</span>
+      <span class="n">settings_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">'settings.py'</span><span class="p">,</span> <span class="s">'w'</span><span class="p">)</span>
+      <span class="n">settings_template</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">templates_path</span> <span class="o">+</span> <span class="s">'/settings.py'</span><span class="p">)</span>
+      <span class="n">settings_file</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">settings_template</span><span class="p">.</span><span class="n">read</span><span class="p">().</span><span class="n">replace</span><span class="p">(</span><span class="s">''</span><span class="p">,</span> <span class="n">project_name</span><span class="p">))</span>
+      <span class="n">settings_file</span><span class="p">.</span><span class="n">close</span><span class="p">()</span>
+
+  <span class="k">def</span> <span class="nf">create_secret_key</span><span class="p">():</span>
+      <span class="k">print</span><span class="s">'Creating secret key'</span>
+      <span class="n">settings_contents</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">'settings.py'</span><span class="p">,</span> <span class="s">'r'</span><span class="p">).</span><span class="n">read</span><span class="p">()</span>
+      <span class="n">fp</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">'settings.py'</span><span class="p">,</span> <span class="s">'w'</span><span class="p">)</span>
+      <span class="n">secret_key</span> <span class="o">=</span> <span class="s">''</span><span class="p">.</span><span class="n">join</span><span class="p">([</span><span class="n">choice</span><span class="p">(</span><span class="s">'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&amp;*(-_=+)'</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">50</span><span class="p">)])</span>
+      <span class="n">settings_contents</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s">"(?&lt;=SECRET_KEY = ')'"</span><span class="p">,</span> <span class="n">secret_key</span> <span class="o">+</span> <span class="s">"'"</span><span class="p">,</span> <span class="n">settings_contents</span><span class="p">)</span>
+      <span class="n">fp</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">settings_contents</span><span class="p">)</span>
+      <span class="n">fp</span><span class="p">.</span><span class="n">close</span><span class="p">()</span>
+
+  <span class="k">def</span> <span class="nf">create_local_settings_file</span><span class="p">(</span><span class="n">project_name</span><span class="p">,</span> <span class="n">templates_path</span><span class="p">):</span>
+      <span class="k">print</span> <span class="s">'Creating custom settings_local.py file'</span>
+      <span class="n">settings_local_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">'settings_local.py'</span><span class="p">,</span> <span class="s">'w'</span><span class="p">)</span>
+      <span class="n">settings_local_template</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">templates_path</span> <span class="o">+</span> <span class="s">'/settings_local.py'</span><span class="p">)</span>
+      <span class="n">settings_local_file</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">settings_local_template</span><span class="p">.</span><span class="n">read</span><span class="p">().</span><span class="n">replace</span><span class="p">(</span><span class="s">''</span><span class="p">,</span> <span class="n">project_name</span><span class="p">))</span>
+      <span class="n">settings_local_file</span><span class="p">.</span><span class="n">close</span><span class="p">()</span>
+
+  <span class="k">def</span> <span class="nf">create_other_files</span><span class="p">(</span><span class="n">project_name</span><span class="p">,</span> <span class="n">starting_path</span><span class="p">):</span>
+      <span class="k">print</span> <span class="s">'Creating Sublime Text project files'</span>
+      <span class="n">os</span><span class="p">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">starting_path</span> <span class="o">+</span> <span class="s">'/'</span> <span class="o">+</span> <span class="n">project_name</span><span class="p">)</span>
+      <span class="n">sublimetext_project</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">project_name</span> <span class="o">+</span> <span class="s">'.sublime-project'</span><span class="p">,</span> <span class="s">'w'</span><span class="p">).</span><span class="n">write</span><span class="p">(</span><span class="s">'{"folders": [{"path": "'</span> <span class="o">+</span> <span class="n">project_name</span> <span class="o">+</span> <span class="s">'"}]}'</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="nf">create_git_repo</span><span class="p">(</span><span class="n">project_name</span><span class="p">,</span> <span class="n">starting_path</span><span class="p">,</span> <span class="n">templates_path</span><span class="p">):</span>
+      <span class="n">repo</span> <span class="o">=</span> <span class="n">Repo</span><span class="p">.</span><span class="n">init</span><span class="p">(</span><span class="s">''</span><span class="p">.</span><span class="n">join</span><span class="p">([</span><span class="n">starting_path</span><span class="p">,</span> <span class="s">'/'</span><span class="p">,</span> <span class="n">project_name</span><span class="p">,</span> <span class="s">'/'</span><span class="p">,</span> <span class="n">project_name</span><span class="p">]))</span>
+      <span class="n">git_ignore</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">starting_path</span> <span class="o">+</span> <span class="s">'/'</span> <span class="o">+</span> <span class="n">project_name</span> <span class="o">+</span> <span class="s">'/'</span> <span class="o">+</span> <span class="n">project_name</span> <span class="o">+</span> <span class="s">'/.gitignore'</span><span class="p">,</span> <span class="s">'w'</span><span class="p">)</span>
+      <span class="n">git_ignore_contents</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">templates_path</span> <span class="o">+</span> <span class="s">'/.gitignore'</span><span class="p">).</span><span class="n">read</span><span class="p">()</span>
+      <span class="n">git_ignore</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">git_ignore_contents</span><span class="p">)</span>
+      <span class="n">git_ignore</span><span class="p">.</span><span class="n">close</span><span class="p">()</span>
+
+  <span class="k">def</span> <span class="nf">create_deploy_script</span><span class="p">(</span><span class="n">project_name</span><span class="p">,</span> <span class="n">starting_path</span><span class="p">,</span> <span class="n">templates_path</span><span class="p">):</span>
+      <span class="k">print</span> <span class="s">'Creating remote deploy script'</span>
+      <span class="n">os</span><span class="p">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">starting_path</span> <span class="o">+</span> <span class="s">'/'</span> <span class="o">+</span> <span class="n">project_name</span> <span class="o">+</span> <span class="s">'/'</span> <span class="o">+</span> <span class="n">project_name</span><span class="p">)</span>
+      <span class="n">deploy_script</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">'deploy.sh'</span><span class="p">,</span> <span class="s">'w'</span><span class="p">)</span>
+      <span class="n">deploy_contents</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">templates_path</span> <span class="o">+</span> <span class="s">'/deploy.sh'</span><span class="p">,</span> <span class="s">'r'</span><span class="p">).</span><span class="n">read</span><span class="p">().</span><span class="n">replace</span><span class="p">(</span><span class="s">''</span><span class="p">,</span> <span class="n">project_name</span><span class="p">)</span>
+      <span class="n">deploy_script</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">deploy_contents</span><span class="p">)</span>
+      <span class="n">deploy_script</span><span class="p">.</span><span class="n">close</span><span class="p">()</span>
+      <span class="n">subprocess</span><span class="p">.</span><span class="n">call</span><span class="p">(</span><span class="s">'chmod 700 deploy.sh'</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+      <span class="n">main</span><span class="p">()</span></code></pre></figure>
+
+<p>This calls to a templates directory that has a settings.py settings_local.py and deploy.sh templates.</p>
+
+<p>A few other things to note: most actions are called as subprocesses directly to the command line rather than using wrapper libraries primarily out of laziness.  When replacing the settings file it is important to remember to regenerate the secrete_key.  The deploy script is not an integration script.  For most of my personal projects I run tests locally and push to github for integration.</p>
+
+<p>If you want to use this script or something similar simply clone <a href="https://github.com/DanielNill/django_create">https://github.com/DanielNill/django_create</a> and modify as you like.</p>
+
+    </div><!-- /.article-wrap -->
+  </article>
+</div><!-- /#index -->
+
+<div class="footer-wrap">
+  <footer>
+    <span>&copy; 2023 Daniel Nill.</span>
+
+  </footer>
+</div><!-- /.footer-wrap -->
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<!-- Asynchronous Google Analytics snippet -->
+<script>
+  var _gaq = _gaq || [];
+  var pluginUrl = 
+ '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+  _gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+  _gaq.push(['_setAccount', 'UA-29127035-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+          
+
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>Adding a WYSIWYG Editor to Django Admin &#8211; Daniel Nill</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<!-- Twitter Cards -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="/images/">
+<meta name="twitter:title" content="Adding a WYSIWYG Editor to Django Admin">
+<meta name="twitter:description" content="">
+<meta name="twitter:creator" content="@DanielNill">
+<link type="application/atom+xml" rel="alternate" href="/feed.xml" title="Daniel Nill" />
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Adding a WYSIWYG Editor to Django Admin">
+<meta property="og:description" content="">
+<meta property="og:url" content="/adding-a-wysiwyg-editor-to-django">
+<meta property="og:site_name" content="Daniel Nill">
+
+
+
+
+
+<link rel="canonical" href="/adding-a-wysiwyg-editor-to-django">
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Daniel Nill Feed">
+
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Google Webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700|PT+Serif:400,700,400italic' rel='stylesheet' type='text/css'>
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.min.css">
+
+<!--[if (lt IE 9) & (!IEMobile)]>
+<link rel="stylesheet" href="/assets/css/ie.min.css">
+<![endif]-->
+
+<meta http-equiv="cleartype" content="on">
+
+</head>
+
+<body class="page" itemscope itemtype="http://schema.org/WebPage">
+
+<!--[if lt IE 9]><div class="browser-upgrade alert alert-info">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div><![endif]-->
+
+<div class="navigation-wrapper">
+	<div class="site-name">
+		<a href="">Daniel Nill</a>
+	</div><!-- /.site-name -->
+	<div class="top-navigation">
+		<nav role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+		    <ul>
+		        
+				<li><a href="/" >Posts</a></li>
+		        
+				<li><a href="/about.html" >About</a></li>
+		        
+		    </ul>
+		</nav>
+	</div><!-- /.top-navigation -->
+</div><!-- /.navigation-wrapper -->
+
+
+
+
+<div id="main" role="main"  itemprop="mainContentOfPage">
+  <div class="article-author-side">
+    <!-- <img src="/images/profile-photo-new1.jpg" class="bio-photo" alt="Daniel Nill bio photo"></a> -->
+<p></p>
+<br/>
+<a href="http://twitter.com/DanielNill" class="author-social" target="_blank"><i class="icon-twitter"></i> Twitter</a>
+
+
+<a href="http://linkedin.com/in/danielnill" class="author-social" target="_blank"><i class="icon-linkedin"></i> LinkedIn</a>
+
+<a href="http://github.com/DanielNill" class="author-social" target="_blank"><i class="icon-github"></i> Github</a>
+
+
+
+  </div>
+  <article itemscope itemtype="http://schema.org/CreativeWork">
+    <h1 itemprop="name">Adding a WYSIWYG Editor to Django Admin</h1>
+    <div class="article-wrap" itemprop="text">
+      <p>This will tell you pretty much everything you need to know about adding a WYSIWYG editor or any other javascript based features you may want to your django admin.</p>
+
+<p>For most modern WYSIWYG editors installation is just a matter of adding a few lines of javascript and possibly adding a class or id to the textareas you want effected.  <a href="https://code.djangoproject.com/wiki/AddWYSIWYGEditor">This django wiki entry</a> gets you about half the way depending on the editor you want to use, but there are a few other tricks you can use depending on your editor of choice.  Here I’ll show the instalation process for  Tiny MCE and CKEditor, two of the more popular WYSIWYGs, both of which use different installation methods, to show you the modifications you can make to get most editors working.</p>
+
+<p>###Tiny MCE</p>
+
+<p>Tiny MCE isn’t a great editor and if given the choice I would suggest switching to something else (like CKEditor outlined below). But that’s niether here nor there.  It’s very popular, and provides a good example of methods you can use to install javascript plugins in the django admin.</p>
+
+<p>So for Tiny MCE first you want to create a javascript file that has the basic installaiton script, we will call it textarea.js:</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">tinyMCE</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+  <span class="na">mode</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">textareas</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">theme</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">advanced</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">theme_advanced_toolbar_location</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">top</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">theme_advanced_toolbar_align</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">left</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">plugins</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">table, save, advhr, advimage, advlink, emotions, iespell, insertdatetime, preview</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">theme_advanced_buttons1</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">fullscreen, separator, preview, separator, bold, italic, underline, strikethrough, separator, bullist, numlist, outdent, indent, separator, undo, redo, separator, link, unlink, anchor, separator, image, cleanup, help, separator, code</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">auto_cleanup_word</span> <span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="na">plugin_insertdate_dateFormat</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">%m/%d/%Y</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">plugin_insertdate_timeFormat</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">%H:%M:%S</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">extended_valid_elements</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">a[name|href|target=_blank|title|onclick], img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name], hr[class|width|size|noshade], font[face|size|color|style], span[class|align|style]</span><span class="dl">"</span>
+<span class="p">});</span></code></pre></figure>
+
+<p>You can find the details of setting up your layout here, but the basic thing you need is a javascript file with</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">tinyMCE</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span><span class="na">mode</span><span class="p">:</span> <span class="dl">"</span><span class="s2">textarea</span><span class="dl">"</span><span class="p">,</span> <span class="p">...});</span></code></pre></figure>
+
+<p>Now, the key to adapting this method to installing other WYSIWYG editors is knowing that you can include any javascript file in the django admin.  To do this you simply need to add a media subclass to your custom admin model.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">SomeModelAdmin</span><span class="p">(</span><span class="n">admin</span><span class="p">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Media</span><span class="p">:</span>
+        <span class="n">js</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s">'/media/tiny_mce/tiny_mce.js'</span><span class="p">,</span>
+            <span class="s">'/media/textareas.js'</span><span class="p">,</span>
+        <span class="p">)</span></code></pre></figure>
+
+<p>This will load the resources listed into the /admin/app_name/model_name/.  As you can see for Tiny MCE you need to include the textareas.js file we just made and the main Tiny MCE script which I choose to store in my media directory.</p>
+
+<p>For Tiny MCE that is all you need.  The WYSIWYG will be included on all textareas in your admin.</p>
+
+<p>###CKEditor</p>
+
+<p>CKEditor is a much nicer editor.  It’s primary drawback, however, is its limit documentation.  Luckily, because it is a nice editor there are plenty of tutorials for installation online.  The primary difference between installation for CKEditor and Tiny MCE is that you cannot assign the plugin to generic textareas like you can Tiny MCE. You must assign the editor by class or id.</p>
+
+<p>But this is not a problem.  We just modify the django admin to have a custom class assigned to textareas.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span>
+
+<span class="k">class</span> <span class="nc">SomeModelAdmin</span><span class="p">(</span><span class="n">admin</span><span class="p">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="n">formfield_overrides</span> <span class="o">=</span> <span class="p">{</span> <span class="n">models</span><span class="p">.</span><span class="n">TextField</span><span class="p">:</span> <span class="p">{</span><span class="s">'widget'</span><span class="p">:</span> <span class="n">forms</span><span class="p">.</span><span class="n">Textarea</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">'class'</span><span class="p">:</span><span class="s">'ckeditor'</span><span class="p">})},</span> <span class="p">}</span>
+
+    <span class="k">class</span> <span class="nc">Media</span><span class="p">:</span>
+        <span class="n">js</span> <span class="o">=</span> <span class="p">(</span><span class="s">'/media/ckeditor/ckeditor.js'</span><span class="p">,)</span></code></pre></figure>
+
+<p>Note that we are still including the ckeditor javascript file.  But a custom javascript file is not needed unless you want to modify the WYSIWYG’s layout.</p>
+
+<p>So that is pretty much all you need to know.  Between those two methods you should be able to add most javascript based plugins to your django admin.</p>
+
+    </div><!-- /.article-wrap -->
+  </article>
+</div><!-- /#index -->
+
+<div class="footer-wrap">
+  <footer>
+    <span>&copy; 2023 Daniel Nill.</span>
+
+  </footer>
+</div><!-- /.footer-wrap -->
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<!-- Asynchronous Google Analytics snippet -->
+<script>
+  var _gaq = _gaq || [];
+  var pluginUrl = 
+ '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+  _gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+  _gaq.push(['_setAccount', 'UA-29127035-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+          
+
+</body>
+</html>

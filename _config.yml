@@ -11,10 +11,10 @@ owner:
   #bio:            A Coder.
   email:          daniel.l.nill@email.com
   # Social networking links are used in author-bio sidebar. Update and remove as you like.
-  twitter:
+  twitter: DanielNill
   facebook:
-  github:
-  linkedin:
+  github: DanielNill
+  linkedin: danielnill
   instagram:
   lastfm:
   tumblr:
@@ -32,8 +32,10 @@ bing_verify:
 links:
   - title: Posts
     url: /
-  - title: Contact
-    url: /contact.html
+  - title: About
+    url: /about.html
+  # - title: Projects
+    # url: /projects.html
 
 # for rss feed
 plugins:
